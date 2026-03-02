@@ -328,7 +328,7 @@
             // Render Itinerary
             const itinContainer = document.getElementById('itinerary-container');
             itinContainer.innerHTML = itinerary.map((dest, index) => {
-                const isFirst = index === 1; // Open Tokyo by default
+                const isFirst = false; // Start with all sections closed
                 
                 let detailsHTML = '';
                 if(dest.accommodation) detailsHTML += `<div class="flex items-start gap-2 text-sm text-slate-700 bg-white p-3 rounded-lg border border-slate-100"><i class="fa-solid fa-bed text-red-500 mt-1 shrink-0"></i><div><span class="font-semibold block mb-0.5">Stay</span>${dest.accommodation}</div></div>`;
