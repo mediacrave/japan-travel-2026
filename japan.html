@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Japan 2026 Itinerary</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom styles for animations and hiding scrollbars */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 2000px; /* Arbitrary large number to allow full expansion */
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-[#F8F9FA] font-sans text-slate-800 pb-20">
+
+    <!-- HERO SECTION -->
+    <div class="relative h-64 w-full bg-slate-900 overflow-hidden">
+        <img 
+            src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1000&auto=format&fit=crop" 
+            alt="Japan Temple" 
+            class="absolute inset-0 w-full h-full object-cover opacity-50"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-[#F8F9FA] via-transparent to-transparent"></div>
+        <div class="absolute bottom-6 left-6 right-6">
+            <span class="inline-block px-3 py-1 bg-red-600 text-white text-xs font-bold uppercase tracking-wider rounded-full mb-3">
+                28 Days Total
+            </span>
+            <h1 class="text-4xl font-extrabold text-white flex items-center gap-2 drop-shadow-lg">
+                JAPAN 2026 <span class="text-2xl">🏯</span>
+            </h1>
+            <p class="text-slate-200 font-medium mt-1 flex items-center gap-2 drop-shadow">
+                <i class="fa-solid fa-calendar text-sm"></i>
+                Sept 5 - Oct 2, 2026
+            </p>
+        </div>
+    </div>
+
+    <!-- NAVIGATION TABS -->
+    <div class="sticky top-0 z-50 bg-[#F8F9FA]/90 backdrop-blur-md border-b border-slate-200 px-4 py-3">
+        <div class="flex gap-2 max-w-lg mx-auto overflow-x-auto no-scrollbar">
+            <button onclick="switchTab('itinerary')" id="btn-itinerary" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap flex-1 justify-center bg-slate-800 text-white shadow-md">
+                <i class="fa-regular fa-map"></i> Itinerary
+            </button>
+            <button onclick="switchTab('bookings')" id="btn-bookings" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap flex-1 justify-center bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
+                <i class="fa-regular fa-clock"></i> Deadlines
+            </button>
+            <button onclick="switchTab('notes')" id="btn-notes" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap flex-1 justify-center bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">
+                <i class="fa-solid fa-circle-info"></i> Notes
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="max-w-lg mx-auto p-4 relative">
+        
+        <!-- ITINERARY TAB -->
+        <div id="tab-itinerary" class="tab-content fade-in">
+            <div class="mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3">
+                <i class="fa-regular fa-compass text-red-500 text-2xl shrink-0"></i>
+                <p class="text-sm text-slate-600 font-medium leading-snug">
+                    18 days of vacation/work, 28 days total. Tap a destination to view daily plans and logistics.
+                </p>
+            </div>
+            
+            <div id="itinerary-container" class="space-y-2">
+                <!-- Javascript will inject cards here -->
+            </div>
+        </div>
+
+        <!-- BOOKINGS TAB -->
+        <div id="tab-bookings" class="tab-content hidden fade-in">
+            <div class="bg-red-50 text-red-800 p-4 rounded-2xl text-sm mb-6 border border-red-100 flex gap-3">
+                <i class="fa-solid fa-triangle-exclamation shrink-0 mt-0.5 text-lg"></i>
+                <p>Set calendar reminders for these exact dates. High-demand tickets sell out within minutes of opening.</p>
+            </div>
+            <div id="bookings-container" class="space-y-6">
+                <!-- Javascript will inject bookings here -->
+            </div>
+        </div>
+
+        <!-- NOTES TAB -->
+        <div id="tab-notes" class="tab-content hidden fade-in">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="bg-slate-100 p-2 rounded-full w-10 h-10 flex items-center justify-center">
+                        <i class="fa-solid fa-book-open text-slate-700"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-800">General Advice</h2>
+                </div>
+                <ul id="notes-container" class="space-y-4">
+                    <!-- Javascript will inject notes here -->
+                </ul>
+            </div>
+            <div class="mt-6 text-center text-xs text-slate-400 pb-10">
+                Generated for Japan 2026 Trip 🎌
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA ---
+        const tripNotes = [
+            "Silver Week: Saturday Sept 19th to Wednesday Sept 23rd 2026.",
+            "Suggested Apps: Navitime/Japan Transit Planner, GO Taxi, Klook or SmartEX, Ecbo Cloak (Luggage).",
+            "Transit: Digital Suica or Pasmo card for tap-and-go transit access (Not on Android).",
+            "Kyoto will have a higher tourist tax.",
+            "IDP (International Driving Permit) is required if renting a car.",
+            "Tipping is not required and often seen as rude, unless staying at a Ryokan.",
+            "Japan Rail Pass is NOT worth it for this specific route.",
+            "Consider: Nikko Pass World Heritage Area or Nikko Pass All Area.",
+            "Consider: Hakone Freepass."
+        ];
+
+        const bookingDeadlines = [
+            {
+                period: "July 2026 (60 Days Out & Flexible)",
+                items: [
+                    { title: "TeamLab Tickets", date: "Early to Mid-July", desc: "Planets (Sept 8), Biovortex Kyoto (Sept 15), Botanical Garden Osaka (Sept 19). Opens 2-3 months in advance." },
+                    { title: "Universal Studios Japan", date: "July 20, 2026", desc: "Studio Passes & Express Passes for Super Nintendo World (Sept 18 visit). Opens exactly 60 days in advance at midnight JST." },
+                    { title: "Shimanami Kaido e-Bikes", date: "Late July 2026", desc: "Reserve e-Bikes for Sept 25th ride. Rental windows open 1-2 months in advance. E-bikes sell out first." }
+                ]
+            },
+            {
+                period: "August 2026 (30 Days Out - Shinkansen)",
+                desc: "Book exactly one month (30 days) in advance at 10:00 AM JST via SmartEX.",
+                items: [
+                    { title: "Mishima to Kyoto", date: "Aug 15, 2026", desc: "For Sept 14th travel. Reserve 'oversized baggage' seats if needed." },
+                    { title: "Osaka to Himeji to Hiroshima", date: "Aug 23, 2026", desc: "For Sept 22nd travel." },
+                    { title: "Hiroshima to Onomichi", date: "Aug 26, 2026", desc: "JR Sanyo Shinkansen for Sept 25th." },
+                    { title: "Imabari to Tokyo", date: "Aug 27, 2026", desc: "Return leg for Sept 26th (JR Limited Express Shiokaze + Sanyo Shinkansen Nozomi)." },
+                    { title: "Tohoku Shinkansen (Zao Fox)", date: "Aug 29, 2026", desc: "Round-trip tickets for Zao Fox Village day trip." }
+                ]
+            },
+            {
+                period: "September 2026 (Same Day)",
+                items: [
+                    { title: "Kichi Kichi Omurice", date: "Sept 14, 2026", desc: "Visit restaurant early morning to get the daily password. Use password to book dinner slot online at exactly 1:00 PM that same day." }
+                ]
+            }
+        ];
+
+        const itinerary = [
+            { id: 'departure', title: 'Departure: Kelowna to Tokyo', dates: 'Sat Sept 5 - Sun Sept 6', daysCount: 'Transit', icon: 'fa-plane', travel: 'Kelowna (YLW) -> Vancouver (YVR) [Westjet 5:55am-7:00am]. 3h 45m layover. Vancouver (YVR) -> Tokyo (NRT) [Zipair 10:45am - Sun 12:40pm].', days: [] },
+            { id: 'tokyo-1', title: 'Tokyo', dates: 'Sun Sept 6 - Thurs Sept 10', daysCount: '4 Days', icon: 'fa-location-dot', accommodation: 'APA Hotel Keisei Ueno Ekimae (2-14-26 Ueno, Taito-ku)', travel: 'Take the Keisei Skyliner from NRT to Ueno', days: [
+                { date: 'Sept 6 (Sun)', desc: 'Check in to the hotel. Grab a casual dinner at Ameyoko Market (2h). Finish with a night visit to Senso-ji (1.5h).' },
+                { date: 'Sept 7 (Mon)', desc: 'Visit Senso-ji (30m) first thing. Head to Kappabashi Kitchen Supply Town (3h). Walk through Ueno Park (1h), and spend afternoon at Ueno Zoo (3.5h).' },
+                { date: 'Sept 8 (Tue)', desc: 'Zao Fox Village day trip. Catch the Tohoku Shinkansen directly from Ueno Station.' },
+                { date: 'Sept 9 (Wed)', desc: 'Head to Toyosu for TeamLab Planets (4h). Spend afternoon exploring Ginza architecture and culinary scene.' },
+                { date: 'Sept 10 (Thurs)', desc: 'Check out.' }
+            ]},
+            { id: 'nikko', title: 'Nikko', dates: 'Thurs Sept 10 - Sat Sept 12', daysCount: '2 Days', icon: 'fa-location-dot', accommodation: 'AirBnB (4-1 Ishiyamachi, Nikko)', travel: 'Tobu Railway from Asakusa to Nikko (~2h) or JR Shinkansen if using Rail Pass.', days: [
+                { date: 'Sept 10 (Thurs)', desc: 'Check in. Luggage can be stored at Tobu-Nikko Station. Head to Shinkyo Bridge (30m), then Nikko Toshogu (2.5h).' },
+                { date: 'Sept 11 (Fri)', desc: 'Start with Kegon Waterfalls (1h) then Senjogahara Marshland (3h) for the boardwalk hike.' },
+                { date: 'Sept 12 (Sat)', desc: 'Check out.' }
+            ]},
+            { id: 'hakone', title: 'Hakone', dates: 'Sat Sept 12 - Mon Sept 14', daysCount: '2 Days', icon: 'fa-location-dot', accommodation: 'Tokinoyu Setsugetsuka (1300-34 Gora)', travel: 'Travel from Nikko to Hakone via Shinjuku (~4h).', days: [
+                { date: 'Sept 12 (Sat)', desc: 'Check in. Hakone Baggage Service can deliver luggage. Wander Hakone Open-Air Museum (2h).' },
+                { date: 'Sept 13 (Sun)', desc: 'Hakone Loop (~5h). Gora -> Sounzan (Cable Car) -> Owakudani Ropeway -> Togendai Ropeway -> Lake Ashi Pirate ship -> Old Tokaido Road Walk -> Gora.' },
+                { date: 'Sept 14 (Mon)', desc: 'Check out.' }
+            ]},
+            { id: 'kyoto', title: 'Kyoto', dates: 'Mon Sept 14 - Thurs Sept 17', daysCount: '4 Days', icon: 'fa-location-dot', accommodation: 'AirBnB (Nakagyo Ward, Kajiyacho)', travel: 'Bus to Mishima to walk Mishima Sky Walk (2h). Shinkansen from Mishima to Kyoto (~4h).', days: [
+                { date: 'Sept 14 (Mon)', desc: 'Check in. Try Kichi Kichi Omurice for dinner (needs morning password!).' },
+                { date: 'Sept 15 (Tue)', desc: 'Tenryu-ji (1.5h), Arashiyama Bamboo Forest (45m), finish with TeamLab Biovortex Kyoto (2.5h).' },
+                { date: 'Sept 16 (Wed)', desc: 'Fushimi Inari Taisha (2.5h) and finish with Kiyomizu-dera (2h).' },
+                { date: 'Sept 17 (Thurs)', desc: 'Check out.' }
+            ]},
+            { id: 'osaka', title: 'Osaka', dates: 'Thurs Sept 17 - Tue Sept 22', daysCount: '5 Days', icon: 'fa-location-dot', accommodation: 'AirBnB (Nipponbashi-4 Chome, Naniwa Ward)', travel: 'Short 30-minute train from Kyoto to Osaka.', days: [
+                { date: 'Sept 17 (Thurs)', desc: 'Check in. Lock luggage at Osaka-Namba Station if needed. Kuromon Market (1.5h) then Osaka Castle (2h).' },
+                { date: 'Sept 18 (Fri)', desc: 'Super Nintendo World (USJ).' },
+                { date: 'Sept 19 (Sat)', desc: 'Tsurumi Ryokuchi parkrun. TeamLab Botanical Garden Osaka (2h) in the evening.' },
+                { date: 'Sept 20 (Sun)', desc: 'Nara Day Trip: Todai-ji & Nara Park (3h), Kasugataisha Shrine & Mount Wakakusa (2h), back to Osaka.' },
+                { date: 'Sept 21 (Mon)', desc: 'Osaka Aquarium Kaiyukan (3h) and Sumiyoshi Taisha (1h).' },
+                { date: 'Sept 22 (Tue)', desc: 'Check out.' }
+            ]},
+            { id: 'hiroshima', title: 'Hiroshima', dates: 'Tue Sept 22 - Fri Sept 25', daysCount: '3 Days', icon: 'fa-location-dot', accommodation: 'HOTEL INTERGATE Hiroshima (Naka Ward)', travel: 'Shinkansen to Himeji. Store carry-ons in lockers, explore Himeji Castle. Continue to Hiroshima (~4h total travel).', days: [
+                { date: 'Sept 22 (Tue)', desc: 'Check in. Shukkeien Garden (1.5h).' },
+                { date: 'Sept 23 (Wed)', desc: 'Atomic Bomb Dome (45m) and Peace Memorial Park (2.5h).' },
+                { date: 'Sept 24 (Thurs)', desc: 'Miyajima Island: Itsukushima Jinja (1h), Daishoin (1h), Momijidani Park (45m), Mount Misen (2.5h), Omotesando Shopping Street (1.5h).' },
+                { date: 'Sept 25 (Fri)', desc: 'Check out.' }
+            ]},
+            { id: 'shimanami', title: 'Shimanami Kaido', dates: 'Fri Sept 25 - Sat Sept 26', daysCount: '2 Days', icon: 'fa-bicycle', accommodation: 'SOIL Setoda (Setoda-cho, Onomichi)', travel: 'JR Sanyo Shinkansen (~1h) from Hiroshima to Onomichi.', notes: 'Luggage: Yamato Transport (Kuroneko) to ship to Tokyo from Hiroshima.', days: [
+                { date: 'Sept 25 (Fri)', desc: 'Rent e-Bikes from Shimanami Rental Cycle. 5-min ferry to Mukaishima. Kousanji Temple, then check in.' },
+                { date: 'Sept 26 (Sat)', desc: 'Check out. Oyamazumi Shrine, Sunrise Itoyama, 2nd Kurushima-Kaikyo Bridge. Return Bike in Imabari and return to Tokyo.' }
+            ]},
+            { id: 'tokyo-2', title: 'Tokyo (Return)', dates: 'Sat Sept 26 - Fri Oct 2', daysCount: '6 Days', icon: 'fa-location-dot', accommodation: 'Western-style business hotel near Shinjuku', travel: 'JR Limited Express Shiokaze (Imabari to Okayama). Transfer to Sanyo Shinkansen Nozomi (Okayama to Tokyo). ~5.5h total.', days: [
+                { date: 'Sept 26 (Sat)', desc: 'Arrive from Imabari and check in late.' },
+                { date: 'Sept 27 (Sun)', desc: 'Meiji Jingu (1h) in the morning. Shibuya Crossing (1h) afterwards.' },
+                { date: 'Sept 28 (Mon)', desc: 'Nature & Architecture: Nezu Shrine (45m) then Rikugien Gardens (1h).' },
+                { date: 'Sept 29 (Tue)', desc: 'Eastern Shopping: Akihabara e-Earphones (2h), HINOYA for denim shopping (1.5h).' },
+                { date: 'Sept 30 (Wed)', desc: 'Arakurayama Sengen Park (2.5h). Transit departs directly from Shinjuku.' },
+                { date: 'Oct 1 (Thurs)', desc: 'Free Day!' },
+                { date: 'Oct 2 (Fri)', desc: 'Check Out. Head to NRT.' }
+            ]},
+            { id: 'return', title: 'Return: Tokyo to Kelowna', dates: 'Fri Oct 2', daysCount: 'Transit', icon: 'fa-plane', travel: 'Tokyo (NRT) -> Vancouver (YVR) [Zipair 3:55pm - 8:30am]. 5h 05m layover. Vancouver (YVR) -> Kelowna (YLW) [Westjet 1:35pm - 2:35pm].', days: [] }
+        ];
+
+        // --- RENDER LOGIC ---
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                // Close others (Optional, but keeps it clean)
+                document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
+                document.querySelectorAll('.fa-chevron-up').forEach(el => {
+                    el.classList.remove('fa-chevron-up');
+                    el.classList.add('fa-chevron-down');
+                });
+                
+                // Open clicked
+                content.classList.add('open');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('fade-in');
+            });
+            
+            // Reset all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap flex-1 justify-center bg-white text-slate-600 border border-slate-200 hover:bg-slate-50";
+            });
+
+            // Show selected content
+            const activeContent = document.getElementById(`tab-${tabId}`);
+            activeContent.classList.remove('hidden');
+            // small delay to re-trigger animation
+            setTimeout(() => activeContent.classList.add('fade-in'), 10);
+
+            // Highlight selected button
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.className = "tab-btn flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-colors whitespace-nowrap flex-1 justify-center bg-slate-800 text-white shadow-md";
+        }
+
+        // Initialize App content
+        function initApp() {
+            // Render Itinerary
+            const itinContainer = document.getElementById('itinerary-container');
+            itinContainer.innerHTML = itinerary.map((dest, index) => {
+                const isFirst = index === 1; // Open Tokyo by default
+                
+                let detailsHTML = '';
+                if(dest.accommodation) detailsHTML += `<div class="flex items-start gap-2 text-sm text-slate-700 bg-white p-3 rounded-lg border border-slate-100"><i class="fa-solid fa-bed text-red-500 mt-1 shrink-0"></i><div><span class="font-semibold block mb-0.5">Stay</span>${dest.accommodation}</div></div>`;
+                if(dest.travel) detailsHTML += `<div class="flex items-start gap-2 text-sm text-slate-700 bg-white p-3 rounded-lg border border-slate-100"><i class="fa-solid fa-train text-red-500 mt-1 shrink-0"></i><div><span class="font-semibold block mb-0.5">Travel</span>${dest.travel}</div></div>`;
+                if(dest.notes) detailsHTML += `<div class="flex items-start gap-2 text-sm text-slate-700 bg-white p-3 rounded-lg border border-slate-100"><i class="fa-solid fa-shield-halved text-amber-500 mt-1 shrink-0"></i><div><span class="font-semibold block mb-0.5">Important</span>${dest.notes}</div></div>`;
+
+                let daysHTML = '';
+                if(dest.days.length > 0) {
+                    daysHTML = `
+                        <div class="mt-6">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 ml-2">Daily Itinerary</h4>
+                            <div class="space-y-4 relative before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+                                ${dest.days.map(day => `
+                                    <div class="relative flex items-start gap-4">
+                                        <div class="absolute left-0 w-6 h-6 rounded-full bg-white border-2 border-red-500 flex items-center justify-center mt-0.5 z-10 shadow-sm">
+                                            <div class="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
+                                        </div>
+                                        <div class="ml-10 bg-white p-3 rounded-xl border border-slate-100 shadow-sm w-full">
+                                            <span class="font-bold text-slate-800 text-sm block mb-1">${day.date}</span>
+                                            <p class="text-slate-600 text-sm leading-relaxed">${day.desc}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden transition-all duration-300">
+                        <div class="p-4 cursor-pointer hover:bg-slate-50 flex items-center justify-between" onclick="toggleAccordion('${dest.id}')">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-red-50 w-12 h-12 rounded-full text-red-600 shrink-0 flex items-center justify-center text-xl">
+                                    <i class="fa-solid ${dest.icon}"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-slate-800 leading-tight">${dest.title}</h3>
+                                    <p class="text-sm text-slate-500 mt-1">${dest.dates} • ${dest.daysCount}</p>
+                                </div>
+                            </div>
+                            <div class="text-slate-400 px-2">
+                                <i id="icon-${dest.id}" class="fa-solid ${isFirst ? 'fa-chevron-up' : 'fa-chevron-down'}"></i>
+                            </div>
+                        </div>
+                        <div id="content-${dest.id}" class="accordion-content ${isFirst ? 'open' : ''}">
+                            <div class="p-4 pt-0 border-t border-slate-100 bg-slate-50/50">
+                                <div class="my-4 space-y-3">${detailsHTML}</div>
+                                ${daysHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Render Bookings
+            const bookingsContainer = document.getElementById('bookings-container');
+            bookingsContainer.innerHTML = bookingDeadlines.map(block => `
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-800 text-lg border-b border-slate-100 pb-3 mb-4">${block.period}</h3>
+                    ${block.desc ? `<p class="text-sm text-slate-500 italic mb-4">${block.desc}</p>` : ''}
+                    <div class="space-y-4">
+                        ${block.items.map((item, i) => `
+                            <div class="flex gap-4">
+                                <div class="flex flex-col items-center mt-1.5">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                                    ${i !== block.items.length - 1 ? `<div class="w-px h-full bg-slate-200 my-1"></div>` : ''}
+                                </div>
+                                <div class="pb-2">
+                                    <div class="font-semibold text-slate-800">${item.title}</div>
+                                    <div class="text-xs font-bold text-red-600 my-1">${item.date}</div>
+                                    <div class="text-sm text-slate-600 mt-1">${item.desc}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Notes
+            const boldWords = ['Silver Week', 'Digital Suica', 'Pasmo', 'Klook', 'SmartEX', 'Ecbo Cloak', 'Japan Rail Pass', 'Nikko Pass', 'Hakone Freepass', 'IDP', 'Tipping'];
+            const notesContainer = document.getElementById('notes-container');
+            notesContainer.innerHTML = tripNotes.map(note => {
+                let formattedNote = note;
+                boldWords.forEach(word => {
+                    if(formattedNote.includes(word)) {
+                        formattedNote = formattedNote.replace(word, `<strong class="text-slate-900 font-bold">${word}</strong>`);
+                    }
+                });
+                return `
+                    <li class="flex gap-3 text-sm text-slate-600">
+                        <div class="mt-1.5 shrink-0"><div class="w-1.5 h-1.5 bg-red-400 rounded-full"></div></div>
+                        <span class="leading-relaxed">${formattedNote}</span>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        // Run initialization
+        initApp();
+    </script>
+</body>
+</html>
